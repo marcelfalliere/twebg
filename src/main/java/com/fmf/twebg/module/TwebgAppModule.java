@@ -23,19 +23,21 @@ public class TwebgAppModule extends AbstractModule {
 	protected void configure() {
 		try {
 			Properties properties = new Properties();
-			properties
-					.load(new FileReader(new File(TwebgAppModule.class.getResource("/.properties").toURI())));
+			properties.load(new FileReader(new File(TwebgAppModule.class
+					.getResource("/app.properties").toURI())));
 
 			bindProperties(binder(), properties);
 			bind(IUserPicturesService.class).to(UserPicturesServiceImpl.class);
 			bind(IUserPicturesDao.class).to(UserPicturesDaoImpl.class);
-			bind(IBackgroundMakerService.class).to(BackgroundMakerServiceImpl.class);
+			bind(IBackgroundMakerService.class).to(
+					BackgroundMakerServiceImpl.class);
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException("Properties file not found.");
 		} catch (IOException e) {
 			throw new RuntimeException("IOE when opening properties file.");
 		} catch (URISyntaxException e) {
-			throw new RuntimeException("URISyntaxException when opening properties file.");
+			throw new RuntimeException(
+					"URISyntaxException when opening properties file.");
 		}
 	}
 

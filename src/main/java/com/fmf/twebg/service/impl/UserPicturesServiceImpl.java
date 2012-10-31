@@ -1,5 +1,6 @@
 package com.fmf.twebg.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fmf.twebg.dao.IUserPicturesDao;
@@ -9,7 +10,7 @@ import com.google.inject.Inject;
 
 public class UserPicturesServiceImpl implements IUserPicturesService {
 
-	private IUserPicturesDao userPictureDao;
+	private final IUserPicturesDao userPictureDao;
 
 	@Inject
 	public UserPicturesServiceImpl(IUserPicturesDao userPictureDao) {
@@ -17,9 +18,18 @@ public class UserPicturesServiceImpl implements IUserPicturesService {
 	}
 
 	public List<UserPicture> getUserPictures(String screenName) {
-		String jsonFromApi = userPictureDao.getJsonFromApi(screenName);
+		List<UserPicture> allPictures = new ArrayList<UserPicture>();
 
-		return userPictureDao.getUserPicturesFromJsonApi(jsonFromApi);
+		Integer lastTweetId = null;
+		do {
+			String jsonFromApi = userPictureDao
+					.getJsonFromApi(screenName, null);
+			List<UserPicture> userPicturesFromJsonApi = userPictureDao
+					.getUserPicturesFromJsonApi(jsonFromApi);
+			lastTweetId = (userPicturesFromJsonApi.size() > 0) ? userPicturesFromJsonApi
+					.get(userPicturesFromJsonApi.size() - 1).getTweetId()
+					: null;
+		} while (true);
+
 	}
-
 }

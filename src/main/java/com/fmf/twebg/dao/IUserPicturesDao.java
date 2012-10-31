@@ -18,8 +18,9 @@ public interface IUserPicturesDao {
 	 * récupére le json sur GET api v1
 	 * 
 	 * @param screenName
+	 * @param lastTweetId
 	 * @return
 	 */
-	public String getJsonFromApi(String screenName);
+	public String getJsonFromApi(String screenName, Integer lastTweetId);
 
 }
