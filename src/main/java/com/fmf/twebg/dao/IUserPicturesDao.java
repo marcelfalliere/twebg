@@ -1,18 +1,14 @@
 package com.fmf.twebg.dao;
 
-import java.util.List;
-
-import com.fmf.twebg.model.UserPicture;
-
 public interface IUserPicturesDao {
 
 	/**
 	 * parse le json de tweeter et récupére les images
 	 * 
 	 * @param json
-	 * @return
+	 * @return 0:liste des userpictures 1:lasttweetid
 	 */
-	public List<UserPicture> getUserPicturesFromJsonApi(String json);
+	public Object[] getUserPicturesFromJsonApi(String json);
 
 	/**
 	 * récupére le json sur GET api v1
@@ -21,6 +17,6 @@ public interface IUserPicturesDao {
 	 * @param lastTweetId
 	 * @return
 	 */
-	public String getJsonFromApi(String screenName, Integer lastTweetId);
+	public String getJsonFromApi(String screenName, Long lastTweetId);
 
 }

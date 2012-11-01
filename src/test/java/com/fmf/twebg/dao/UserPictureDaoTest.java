@@ -40,8 +40,9 @@ public class UserPictureDaoTest {
 
 	@Test
 	public void can_parse_json_to_get_user_pictures() throws Exception {
-		List<UserPicture> userPicturesFromJsonApi = dao
+		Object[] parsedArray = dao
 				.getUserPicturesFromJsonApi(marcelfalliereStatusesSample);
+		List<UserPicture> userPicturesFromJsonApi = (List<UserPicture>) parsedArray[0];
 		assertThat(userPicturesFromJsonApi).hasSize(1);
 		assertThat(userPicturesFromJsonApi.get(0).getUrl()).isEqualTo(
 				"http://pbs.twimg.com/media/A59ZlAICEAAZSb_.jpg");

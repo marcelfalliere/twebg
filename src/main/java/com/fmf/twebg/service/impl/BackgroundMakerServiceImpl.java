@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
@@ -31,28 +29,45 @@ public class BackgroundMakerServiceImpl implements IBackgroundMakerService {
 	}
 
 	public String generateBackground(List<UserPicture> userPictures) {
-		int targetWidth = (int) (THUMB_SIZE * floor(userPictures.size() / 2));
-		int targetHeight = (int) (THUMB_SIZE * ceil(userPictures.size() / 2));
+		int nbWidth = (int) floor(Math.sqrt(userPictures.size()));
+		int nbHeight = (int) ceil(Math.sqrt(userPictures.size()));
+		int targetWidth = THUMB_SIZE * nbWidth;
+		int targetHeight = THUMB_SIZE * nbHeight;
+
+		// test malade: ajouter des images pour combler
+		int restants = userPictures.size() % nbWidth;
+		while (restants >= 0) {
+			userPictures
+					.add(userPictures.get((int) (Math.random() * (userPictures
+							.size()))));
+			restants--;
+		}
+
 		BufferedImage generatedBackground = new BufferedImage(targetWidth,
 				targetHeight, BufferedImage.TYPE_INT_ARGB);
 		int imageIndex = 0;
 		int lineIndex = 0;
 
+		System.out.println("userPicturesSize=" + userPictures.size()
+				+ " width:" + targetWidth + " height:" + targetHeight);
+
 		try {
 			for (UserPicture userPicture : userPictures) {
 
 				BufferedImage currentImage = ImageIO.read(new URL(userPicture
-						.getUrl()));
+						.getThumbnailUrl()));
 
 				int currentX = (imageIndex * THUMB_SIZE) % targetWidth;
 				int currentY = lineIndex * THUMB_SIZE;
-				System.out.println(currentX + " vs " + currentY);
+
+				System.out.println("imageIndex=" + imageIndex + " foundX:"
+						+ currentX + " foundY:" + currentY);
 
 				generatedBackground.getGraphics().drawImage(currentImage,
 						currentX, currentY, THUMB_SIZE, THUMB_SIZE, null);
 
 				imageIndex++;
-				if (imageIndex % floor(userPictures.size() / 2) == 0) {
+				if (imageIndex % floor(Math.sqrt(userPictures.size())) == 0) {
 					lineIndex++;
 				}
 			}
@@ -61,15 +76,14 @@ public class BackgroundMakerServiceImpl implements IBackgroundMakerService {
 					tweetsPicturesPath + "gen.png"));
 
 		} catch (MalformedURLException e) {
-			Logger.getAnonymousLogger().log(
-					Level.WARNING,
-					"An user picture has a malformed url (" + e.getMessage()
-							+ ")");
+			throw new RuntimeException("An user picture has a malformed url ("
+					+ e.getMessage() + ")");
 		} catch (IOException e) {
-			Logger.getAnonymousLogger().log(
-					Level.WARNING,
+			e.printStackTrace();
+			throw new RuntimeException(
 					"An user picture can not be read OR cannot write final image ("
 							+ e.getMessage() + ")");
+
 		}
 
 		return tweetsPicturesPath + "gen.png";

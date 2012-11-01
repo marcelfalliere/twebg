@@ -16,8 +16,9 @@ import com.google.gson.JsonParser;
 
 public class UserPicturesDaoImpl implements IUserPicturesDao {
 
-	public List<UserPicture> getUserPicturesFromJsonApi(String json) {
+	public Object[] getUserPicturesFromJsonApi(String json) {
 		List<UserPicture> ret = new ArrayList<UserPicture>();
+		Long tweetId = null;
 
 		JsonParser jsonParser = new JsonParser();
 		JsonElement parsedJson = jsonParser.parse(json);
@@ -33,6 +34,7 @@ public class UserPicturesDaoImpl implements IUserPicturesDao {
 			for (int i = 0; i < tweets.size(); i++) {
 				JsonElement tweetJsonElement = tweets.get(i);
 				JsonObject tweet = tweetJsonElement.getAsJsonObject();
+				tweetId = (i == 0) ? null : tweet.get("id").getAsLong();
 				boolean hasEntities = tweet.has("entities");
 				if (hasEntities) {
 					JsonElement entitiesJsonElement = tweet.get("entities");
@@ -56,8 +58,7 @@ public class UserPicturesDaoImpl implements IUserPicturesDao {
 
 									String url = mediaObject.get("media_url")
 											.getAsString();
-									Integer tweetId = mediaObject.get("id")
-											.getAsInt();
+
 									UserPicture userPicture = new UserPicture(
 											url, tweetId);
 									ret.add(userPicture);
@@ -70,16 +71,18 @@ public class UserPicturesDaoImpl implements IUserPicturesDao {
 			}
 		}
 
-		return ret;
+		return new Object[] { ret, tweetId };
 	}
 
-	public String getJsonFromApi(String screenName, Integer lastTweetId) {
+	public String getJsonFromApi(String screenName, Long lastTweetId) {
 
 		String url = "http://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=false&count=200&screen_name="
 				+ screenName;
 		if (lastTweetId != null) {
 			url += "&max_id=" + lastTweetId;
 		}
+		System.out.println("lastTweetId:" + lastTweetId);
+		System.out.println("url: " + url);
 
 		String json = null;
 		try {

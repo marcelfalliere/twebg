@@ -20,16 +20,21 @@ public class UserPicturesServiceImpl implements IUserPicturesService {
 	public List<UserPicture> getUserPictures(String screenName) {
 		List<UserPicture> allPictures = new ArrayList<UserPicture>();
 
-		Integer lastTweetId = null;
+		Long lastTweetId = null;
 		do {
-			String jsonFromApi = userPictureDao
-					.getJsonFromApi(screenName, null);
-			List<UserPicture> userPicturesFromJsonApi = userPictureDao
-					.getUserPicturesFromJsonApi(jsonFromApi);
-			lastTweetId = (userPicturesFromJsonApi.size() > 0) ? userPicturesFromJsonApi
-					.get(userPicturesFromJsonApi.size() - 1).getTweetId()
-					: null;
-		} while (true);
+			String jsonFromApi = userPictureDao.getJsonFromApi(screenName,
+					lastTweetId);
 
+			Object[] parsedArray = userPictureDao
+					.getUserPicturesFromJsonApi(jsonFromApi);
+
+			List<UserPicture> userPicturesFromJsonApi = (List<UserPicture>) parsedArray[0];
+			lastTweetId = (Long) parsedArray[1];
+			allPictures.addAll(userPicturesFromJsonApi);
+
+			System.out.println("passage pour l'id " + lastTweetId);
+		} while (lastTweetId != null);
+
+		return allPictures;
 	}
 }

@@ -22,11 +22,12 @@ public class UserPicturesServiceTest {
 
 	@Test
 	public void should_get_marcelfalliere_pictures() {
-		IUserPicturesService service = injector.getInstance(IUserPicturesService.class);
+		IUserPicturesService service = injector
+				.getInstance(IUserPicturesService.class);
 
 		List<UserPicture> pictures = service.getUserPictures("marcelfalliere");
 
-		Assertions.assertThat(pictures.size()).isEqualTo(19);
+		Assertions.assertThat(pictures.size()).isEqualTo(18);
 	}
 
 }

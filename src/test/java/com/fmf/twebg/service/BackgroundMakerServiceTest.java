@@ -30,21 +30,16 @@ public class BackgroundMakerServiceTest {
 	@Test
 	public void should_generate_a_url_pointing_to_an_image()
 			throws MalformedURLException, IOException {
-		ArrayList<UserPicture> dummyList = Lists
-				.newArrayList(
-						//
-						new UserPicture(
-								"https://pbs.twimg.com/media/A59ZlAICEAAZSb_.jpg:thumb",
-								1), //
-						new UserPicture(
-								"https://pbs.twimg.com/media/A5U2og6CAAAZ29C.jpg:thumb",
-								2), //
-						new UserPicture(
-								"https://pbs.twimg.com/media/A4TCuH2CYAAWPuu.jpg:thumb",
-								3), //
-						new UserPicture(
-								"https://pbs.twimg.com/media/AwFjpVJCQAI552P.jpg:thumb",
-								4) //
+		ArrayList<UserPicture> dummyList = Lists.newArrayList(
+		//
+				new UserPicture(
+						"https://pbs.twimg.com/media/A59ZlAICEAAZSb_.jpg", 1l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A5U2og6CAAAZ29C.jpg", 2l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A4TCuH2CYAAWPuu.jpg", 3l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/AwFjpVJCQAI552P.jpg", 4l) //
 				);
 
 		String generateBackground = service.generateBackground(dummyList);
@@ -54,6 +49,79 @@ public class BackgroundMakerServiceTest {
 		BufferedImage read = ImageIO.read(new File(generateBackground));
 		assertThat(read.getWidth()).isEqualTo(300);
 		assertThat(read.getHeight()).isEqualTo(300);
+
+	}
+
+	@Test
+	public void should_generate_a_url_pointing_to_an_image_big_siez()
+			throws MalformedURLException, IOException {
+		ArrayList<UserPicture> dummyList = Lists.newArrayList(
+		//
+				new UserPicture(
+						"https://pbs.twimg.com/media/A59ZlAICEAAZSb_.jpg", 1l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A5U2og6CAAAZ29C.jpg", 2l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A4TCuH2CYAAWPuu.jpg", 3l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/AwFjpVJCQAI552P.jpg", 4l) //
+				, new UserPicture(
+						"https://pbs.twimg.com/media/A59ZlAICEAAZSb_.jpg", 1l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A5U2og6CAAAZ29C.jpg", 2l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A4TCuH2CYAAWPuu.jpg", 3l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/AwFjpVJCQAI552P.jpg", 4l) //
+				, new UserPicture(
+						"https://pbs.twimg.com/media/A59ZlAICEAAZSb_.jpg", 1l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A5U2og6CAAAZ29C.jpg", 2l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A4TCuH2CYAAWPuu.jpg", 3l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/AwFjpVJCQAI552P.jpg", 4l) //
+				, new UserPicture(
+						"https://pbs.twimg.com/media/A59ZlAICEAAZSb_.jpg", 1l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A5U2og6CAAAZ29C.jpg", 2l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A4TCuH2CYAAWPuu.jpg", 3l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/AwFjpVJCQAI552P.jpg", 4l) //
+				, new UserPicture(
+						"https://pbs.twimg.com/media/A59ZlAICEAAZSb_.jpg", 1l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A5U2og6CAAAZ29C.jpg", 2l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A4TCuH2CYAAWPuu.jpg", 3l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/AwFjpVJCQAI552P.jpg", 4l) //
+				, new UserPicture(
+						"https://pbs.twimg.com/media/A59ZlAICEAAZSb_.jpg", 1l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A5U2og6CAAAZ29C.jpg", 2l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A4TCuH2CYAAWPuu.jpg", 3l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/AwFjpVJCQAI552P.jpg", 4l) //
+				, new UserPicture(
+						"https://pbs.twimg.com/media/A59ZlAICEAAZSb_.jpg", 1l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A5U2og6CAAAZ29C.jpg", 2l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A4TCuH2CYAAWPuu.jpg", 3l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/AwFjpVJCQAI552P.jpg", 4l) //
+				);
+
+		String generateBackground = service.generateBackground(dummyList);
+
+		assertThat(generateBackground).isNotNull();
+		assertThat(generateBackground).isNotEmpty();
+		BufferedImage read = ImageIO.read(new File(generateBackground));
+		assertThat(read.getWidth()).isEqualTo(600);
+		assertThat(read.getHeight()).isEqualTo(750);
 
 	}
 }
