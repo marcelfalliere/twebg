@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 
 import com.fmf.twebg.model.UserPicture;
@@ -54,21 +55,26 @@ public class BackgroundMakerServiceImpl implements IBackgroundMakerService {
 		try {
 			for (UserPicture userPicture : userPictures) {
 
-				BufferedImage currentImage = ImageIO.read(new URL(userPicture
-						.getThumbnailUrl()));
+				try {
+					BufferedImage currentImage = ImageIO.read(new URL(
+							userPicture.getThumbnailUrl()));
 
-				int currentX = (imageIndex * THUMB_SIZE) % targetWidth;
-				int currentY = lineIndex * THUMB_SIZE;
+					int currentX = (imageIndex * THUMB_SIZE) % targetWidth;
+					int currentY = lineIndex * THUMB_SIZE;
 
-				System.out.println("imageIndex=" + imageIndex + " foundX:"
-						+ currentX + " foundY:" + currentY);
+					System.out.println("imageIndex=" + imageIndex + " foundX:"
+							+ currentX + " foundY:" + currentY);
 
-				generatedBackground.getGraphics().drawImage(currentImage,
-						currentX, currentY, THUMB_SIZE, THUMB_SIZE, null);
+					generatedBackground.getGraphics().drawImage(currentImage,
+							currentX, currentY, THUMB_SIZE, THUMB_SIZE, null);
 
-				imageIndex++;
-				if (imageIndex % floor(Math.sqrt(userPictures.size())) == 0) {
-					lineIndex++;
+					imageIndex++;
+					if (imageIndex % floor(Math.sqrt(userPictures.size())) == 0) {
+						lineIndex++;
+					}
+				} catch (IIOException e) {
+					// ImageIO cannot read url, got a 404 or something.
+					// continue ..
 				}
 			}
 

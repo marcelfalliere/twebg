@@ -28,6 +28,33 @@ public class BackgroundMakerServiceTest {
 	}
 
 	@Test
+	public void can_generate_even_if_a_picture_got_a_404()
+			throws MalformedURLException, IOException {
+		ArrayList<UserPicture> dummyList = Lists.newArrayList(
+		//
+				new UserPicture(
+						"https://pbs.twimg.com/media/A59ZlAICEAAZSb_.jpg", 1l), //
+				new UserPicture(
+						"https://pbs.twimg.com/media/A5U2og6CAAAZ29C.jpg", 2l), //
+				new UserPicture(
+						"http://pbs.twimg.com/media/AxoKK97CMAI7sZr.jpg", 3l), // the
+																				// bad
+																				// duck
+				new UserPicture(
+						"https://pbs.twimg.com/media/AwFjpVJCQAI552P.jpg", 4l) //
+				);
+
+		String generateBackground = service.generateBackground(dummyList);
+
+		assertThat(generateBackground).isNotNull();
+		assertThat(generateBackground).isNotEmpty();
+		BufferedImage read = ImageIO.read(new File(generateBackground));
+		assertThat(read.getWidth()).isEqualTo(300);
+		assertThat(read.getHeight()).isEqualTo(300);
+
+	}
+
+	@Test
 	public void should_generate_a_url_pointing_to_an_image()
 			throws MalformedURLException, IOException {
 		ArrayList<UserPicture> dummyList = Lists.newArrayList(
